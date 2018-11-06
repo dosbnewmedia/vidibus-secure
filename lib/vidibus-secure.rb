@@ -4,6 +4,7 @@ require "uri"
 require "active_support/core_ext"
 require "json"
 require "vidibus-core_extensions"
+require "bson"
 
 require "vidibus/secure"
 require "vidibus/secure/mongoid"
