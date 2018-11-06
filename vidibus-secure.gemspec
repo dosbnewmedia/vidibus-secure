@@ -20,7 +20,6 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'rack'
   s.add_dependency 'mongoid'
-  s.add_dependency 'bson'
   s.add_dependency 'activesupport'
   s.add_dependency 'json'
   s.add_dependency 'vidibus-core_extensions'
