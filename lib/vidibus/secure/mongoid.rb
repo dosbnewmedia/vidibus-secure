@@ -1,3 +1,5 @@
+require "bson"
+
 module Vidibus
   module Secure
     module Mongoid
