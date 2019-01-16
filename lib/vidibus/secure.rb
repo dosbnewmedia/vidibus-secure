@@ -37,7 +37,7 @@ module Vidibus
       def sign(data, key, options = {})
         raise KeyError.new("Please provide a secret key to sign data with.") unless key
         options = settings[:sign].merge(options)
-        digest = OpenSSL::Digest::Digest.new(options[:algorithm])
+        digest = digest_class.new(options[:algorithm])
         signature = OpenSSL::HMAC.digest(digest, key, data)
         encode(signature, options)
       end
@@ -64,6 +64,22 @@ module Vidibus
           JSON.parse(decrypted_data)
         rescue JSON::ParserError
           decrypted_data
+        end
+      end
+
+      def cipher_class
+        if OpenSSL::Cipher.respond_to?(:new)
+          OpenSSL::Cipher
+        else
+          OpenSSL::Cipher::Ciper
+        end
+      end
+
+      def digest_class
+        if OpenSSL::Digest.respond_to?(:new)
+          OpenSSL::Digest
+        else
+          OpenSSL::Digest::Digest
         end
       end
 
@@ -114,8 +130,8 @@ module Vidibus
 
       def crypt(cipher_method, data, key, options = {})
         return unless data && data != ''
-        cipher = OpenSSL::Cipher::Cipher.new(options[:algorithm])
-        digest = OpenSSL::Digest::SHA512.new(key).digest
+        cipher = cipher_class.new(options[:algorithm])
+        digest = digest_class::SHA512.new(key).digest
         cipher.send(cipher_method)
         cipher.pkcs5_keyivgen(digest)
         result = cipher.update(data)
