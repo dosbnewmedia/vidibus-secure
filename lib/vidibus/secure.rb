@@ -67,6 +67,7 @@ module Vidibus
         end
       end
 
+
       # Signs request.
       def sign_request(verb, path, params, key, signature_param = nil)
         default_signature_param = :sign
@@ -114,7 +115,7 @@ module Vidibus
 
       def crypt(cipher_method, data, key, options = {})
         return unless data && data != ''
-        cipher = OpenSSL::Cipher::Cipher.new(options[:algorithm])
+        cipher = cipher_class.new(options[:algorithm])
         digest = OpenSSL::Digest::SHA512.new(key).digest
         cipher.send(cipher_method)
         cipher.pkcs5_keyivgen(digest)
@@ -155,6 +156,20 @@ module Vidibus
           array << "#{level}:#{key}:#{value}"
         end
         array.sort.join("|")
+      end
+
+      private
+
+      def cipher_class
+        if ruby_two_point_four_or_above?
+          OpenSSL::Cipher
+        else
+          OpenSSL::Cipher::Cipher
+        end
+      end
+
+      def ruby_two_point_four_or_above?
+        ::RUBY_VERSION.to_f >= 2.4
       end
     end
   end
