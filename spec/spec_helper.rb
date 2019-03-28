@@ -10,7 +10,7 @@ require 'rr'
 require 'vidibus-secure'
 require 'database_cleaner'
 
-Mongo::Logger.logger.level = Logger::FATAL
+#Mongo::Logger.logger.level = Logger::FATAL
 
 Mongoid.configure do |config|
   config.connect_to('vidibus-secure_test')
